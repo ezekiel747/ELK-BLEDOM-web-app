@@ -7,7 +7,7 @@ else {
 
 var brightness = [0, 0, 0];
 var darkness = [0, 0, 0];
-var rgbColor = {r: 255, g: 0, b: 0};
+var rgbColor = { r: 255, g: 0, b: 0 };
 
 function onDisconnected(event) {
 	const device = event.target;
@@ -17,21 +17,25 @@ function onDisconnected(event) {
 var char = null;
 function searchBLEDom() {
 	navigator.bluetooth.requestDevice({
-		filters: [
-			{ services: ['0000fff0-0000-1000-8000-00805f9b34fb'] }
-		]
-	}).then(function(device) {
-		console.log(device);
+		// the filters option didn't work for me (device didn't show up on the list). I've replaced with the other options below. You need to manually select in broweser the ELK-BLEDOM  from the displayed list of devices.
+
+		// filters: [
+		// 	{ services: ['0000fff0-0000-1000-8000-00805f9b34fb'] }
+		// ]
+		acceptAllDevices: true,
+		optionalServices: ['0000fff0-0000-1000-8000-00805f9b34fb'],
+	}).then(function (device) {
+		console.log({ device });
 		device.addEventListener('gattserverdisconnected', onDisconnected);
 		return device.gatt.connect();
-	}).then(function(server) {
-		console.log(server);
+	}).then(function (server) {
+		console.log({ server });
 		return server.getPrimaryService('0000fff0-0000-1000-8000-00805f9b34fb');
-	}).then(function(service) {
-		console.log(service);
+	}).then(function (service) {
+		console.log({ service });
 		return service.getCharacteristic('0000fff3-0000-1000-8000-00805f9b34fb');
-	}).then(function(characteristic) {
-		console.log(characteristic);
+	}).then(function (characteristic) {
+		console.log({ characteristic });
 		char = characteristic;
 		document.getElementById("searchBtn").style.display = "none";
 		document.getElementById("controls").style.display = "block";
@@ -40,7 +44,7 @@ function searchBLEDom() {
 			document.getElementById("midiBtn").style.display = "inline-block";
 		}
 		setColor(rgbColor.r, rgbColor.g, rgbColor.b);
-	}).catch(function(err) {
+	}).catch(function (err) {
 		console.error(err);
 	});
 }
@@ -49,13 +53,13 @@ commandInProgress = false;
 function sendCommand(command, onSuccess) {
 	if (!commandInProgress) {
 		commandInProgress = true;
-		char.writeValue(command).then(function() {
+		char.writeValue(command).then(function () {
 			// console.log("Command written to characteristic");
 			commandInProgress = false;
 			if (typeof onSuccess == 'function') {
 				onSuccess();
 			}
-		}).catch(function(err) {
+		}).catch(function (err) {
 			commandInProgress = false;
 			console.error(err);
 		});
@@ -203,9 +207,9 @@ function attackRelease() {
 		brightness[1] = Math.floor((coeff[1] * brightness[1]) + ((1.0 - coeff[1]) * target[1]));
 		brightness[2] = Math.floor((coeff[2] * brightness[2]) + ((1.0 - coeff[2]) * target[2]));
 		//if (!brightness.equals(darkness)) {
-			//setBrightness(brightness);
-			setColor(brightness[0], brightness[1], brightness[2]);
-			//console.log(brightness);
+		//setBrightness(brightness);
+		setColor(brightness[0], brightness[1], brightness[2]);
+		//console.log(brightness);
 		//}
 	}
 }
