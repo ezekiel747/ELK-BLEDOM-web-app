@@ -10,6 +10,9 @@ Or use it by downloading / cloning locally, then:
 - Click "Connect" button,
 - Select the "ELK-BLEDOM" device from the list, click on the "Pair" button (or equivalent).
 
+There are multiple effects that can be selected, including fading between multiple colors (my fav).
+
+Sample screenshot:
 ![ELK-BLEDOM controller web app](https://ezekiel747.github.io/ELK-BLEDOM-web-app/screenshot.jpg)
 
 (Forked from FreekBes/bledom_controller)
